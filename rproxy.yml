@@ -1,0 +1,33 @@
+- hosts: webserver
+  tasks:
+  - name: Installing httpd
+    package: 
+       name: httpd
+       state: present
+
+  - name: Copying Webpage Content to host file
+    copy:
+       dest: /var/www/html/webpage.html
+       content: "Hey There,Welcome to my WebPage. How may i help you? "
+
+  - name: Starting Service
+    service:
+       name: httpd
+       state: started
+
+- hosts: loadbalancer
+  tasks:
+  - name: Installing haproxy 
+    package:
+       name: haproxy
+       state: present
+
+  - name: Copying files to dest
+    template:
+       dest: /etc/haproxy/haproxy.cfg
+       src: /etc/haproxy/haproxy.cfg
+
+  - name: Starting the service
+    service:
+       name: haproxy
+       state: restarted
